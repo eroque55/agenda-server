@@ -25,15 +25,15 @@ public class Facade implements IFacade {
     }
 
     private void setStrategies() {
-        strategies = new HashMap<String, List<IStrategy>>();
+        strategies = new HashMap<>();
 
         ValidateCustomer validateCustomer = new ValidateCustomer();
         ValidateContact validateContact = new ValidateContact();
 
-        List<IStrategy> strategiesCustomer = new ArrayList<IStrategy>();
+        List<IStrategy> strategiesCustomer = new ArrayList<>();
         strategiesCustomer.add(validateCustomer);
 
-        List<IStrategy> strategiesContact = new ArrayList<IStrategy>();
+        List<IStrategy> strategiesContact = new ArrayList<>();
         strategiesContact.add(validateContact);
 
         strategies.put(Customer.class.getName(), strategiesCustomer);
@@ -41,7 +41,7 @@ public class Facade implements IFacade {
     }
 
     private void setDaos() {
-        daos = new HashMap<String, IDao>();
+        daos = new HashMap<>();
         daos.put(Customer.class.getName(), new CustomerDao());
         daos.put(Contact.class.getName(), new ContactDao());
     }

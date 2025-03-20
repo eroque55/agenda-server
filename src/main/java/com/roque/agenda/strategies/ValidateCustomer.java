@@ -4,8 +4,6 @@ import com.roque.agenda.models.Customer;
 import com.roque.agenda.models.DomainEntity;
 
 import java.time.LocalDate;
-import java.util.Date;
-
 
 public class ValidateCustomer implements IStrategy {
     @Override

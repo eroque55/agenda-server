@@ -2,7 +2,6 @@ package com.roque.agenda.utils;
 
 import com.roque.agenda.models.Contact;
 import com.roque.agenda.models.Customer;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;

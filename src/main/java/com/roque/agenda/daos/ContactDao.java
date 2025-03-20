@@ -1,7 +1,6 @@
 package com.roque.agenda.daos;
 
 import com.roque.agenda.models.Contact;
-import com.roque.agenda.models.Customer;
 import com.roque.agenda.models.DomainEntity;
 import com.roque.agenda.utils.Hibernate;
 
