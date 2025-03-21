@@ -18,34 +18,54 @@ public class CustomerController {
         try {
             Customer customer = new Customer();
             List<DomainEntity> customers = controller.listAll(customer);
-            return ResponseEntity.ok(customer);
+            return ResponseEntity.ok(customers);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping("/{id}")
-    public DomainEntity getCustomer(@PathVariable("id") int id) {
-        Customer customer = new Customer();
-        customer.setId(id);
-        return controller.read(customer);
+    public ResponseEntity<?> getCustomer(@PathVariable("id") int id) {
+        try {
+            Customer customer = new Customer();
+            customer.setId(id);
+            DomainEntity respCustomer = controller.read(customer);
+            return ResponseEntity.ok(respCustomer);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PostMapping("/")
-    public DomainEntity createCustomer(@RequestBody Customer customer) {
-        return controller.create(customer);
+    public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
+        try {
+            DomainEntity respCustomer = controller.create(customer);
+            return ResponseEntity.ok(respCustomer);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable("id") int id) {
-        Customer customer = new Customer();
-        customer.setId(id);
-        controller.delete(customer);
+    public ResponseEntity<?> deleteCustomer(@PathVariable("id") int id) {
+        try {
+            Customer customer = new Customer();
+            customer.setId(id);
+            controller.delete(customer);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public DomainEntity updateCustomer(@PathVariable("id") int id, @RequestBody Customer customer) {
-        customer.setId(id);
-        return controller.update(customer);
+    public ResponseEntity<?> updateCustomer(@PathVariable("id") int id, @RequestBody Customer customer) {
+        try {
+            customer.setId(id);
+            DomainEntity respCustomer = controller.update(customer);
+            return ResponseEntity.ok(respCustomer);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }

@@ -2,7 +2,6 @@ package com.roque.agenda.models;
 
 import jakarta.persistence.*;
 
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class Customer extends DomainEntity {
     @Column
     private String address;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Contact> contacts;
 
     public Customer() {

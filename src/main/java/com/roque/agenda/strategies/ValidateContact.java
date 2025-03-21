@@ -15,6 +15,12 @@ public class ValidateContact implements IStrategy {
 
         Contact contact = (Contact) entity;
 
+        if (contact.getCustomer() == null) {
+            sb.append("Cliente obrigatório\n");
+        } else if (contact.getCustomer().getId() == 0){
+            sb.append("Cliente deve ter um id\n");
+        }
+
         if (contact.getType() == null) {
             sb.append("Tipo de contato obrigatório\n");
         } else if (contact.getType() == ContactType.EMAIL) {

@@ -94,10 +94,10 @@ public class Facade implements IFacade {
     }
 
     @Override
-    public boolean delete(DomainEntity entity) {
+    public void delete(DomainEntity entity) {
         String key = entity.getClass().getName();
         IDao dao = daos.get(key);
-        return dao.delete(entity);
+        dao.delete(entity);
     }
 
     @Override

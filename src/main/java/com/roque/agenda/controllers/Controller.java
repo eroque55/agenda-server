@@ -1,7 +1,6 @@
 package com.roque.agenda.controllers;
 
 import com.roque.agenda.models.DomainEntity;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -15,8 +14,8 @@ public class Controller extends AbstractController{
     public DomainEntity update(DomainEntity entity){
         return facade.update(entity);
     }
-    public boolean delete(DomainEntity entity){
-        return facade.delete(entity);
+    public void delete(DomainEntity entity){
+        facade.delete(entity);
     }
     public List<DomainEntity> listAll(DomainEntity entity){
         return facade.listAll(entity);

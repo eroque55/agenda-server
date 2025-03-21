@@ -2,7 +2,7 @@ package com.roque.agenda.daos;
 
 import com.roque.agenda.models.Contact;
 import com.roque.agenda.models.DomainEntity;
-import com.roque.agenda.utils.Hibernate;
+import com.roque.agenda.utils.Hibernateeeee;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,42 +10,45 @@ import java.util.List;
 public class ContactDao implements IDao {
     @Override
     public DomainEntity create(DomainEntity entity) {
-        Contact contact = (Contact) entity;
         try {
-            Hibernate.getSessionFactory().inTransaction(session -> {
+            Contact contact = (Contact) entity;
+            Hibernateeeee.getSessionFactory().inTransaction(session -> {
                 session.persist(contact);
             });
+
             return contact;
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
     public DomainEntity read(DomainEntity entity) {
-        Contact contact = (Contact) entity;
         try {
-            Hibernate.getSessionFactory().inTransaction(session -> {
+            Contact contact = (Contact) entity;
+            Hibernateeeee.getSessionFactory().inTransaction(session -> {
                 Contact contactDB = session.get(Contact.class, contact.getId());
 
-                if(contactDB != null) {
-                    contact.setType(contactDB.getType());
-                    contact.setValue(contactDB.getValue());
-                    contact.setCustomer(contactDB.getCustomer());
-                    contact.setObservations(contactDB.getObservations());
+                if (contactDB == null) {
+                    throw new RuntimeException("Contato não encontrado");
                 }
+
+                contact.setType(contactDB.getType());
+                contact.setValue(contactDB.getValue());
+                contact.setCustomer(contactDB.getCustomer());
+                contact.setObservations(contactDB.getObservations());
             });
             return contact;
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
     public DomainEntity update(DomainEntity entity) {
-        Contact contact = (Contact) entity;
         try {
-            Hibernate.getSessionFactory().inTransaction(session -> {
+            Contact contact = (Contact) entity;
+            Hibernateeeee.getSessionFactory().inTransaction(session -> {
                 Contact contactDB = session.get(Contact.class, contact.getId());
 
                 if (contactDB == null) {
@@ -75,34 +78,40 @@ public class ContactDao implements IDao {
 
             return contact;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public boolean delete(DomainEntity entity) {
-        Contact contact = (Contact) entity;
+    public void delete(DomainEntity entity) {
         try {
-            Hibernate.getSessionFactory().inTransaction(session -> {
+            Contact contact = (Contact) entity;
+            Hibernateeeee.getSessionFactory().inTransaction(session -> {
                 Contact contactDB = session.get(Contact.class, contact.getId());
+
+                if (contactDB == null) {
+                    throw new RuntimeException("Contato não encontrado");
+                }
+
                 session.remove(contactDB);
             });
-            return true;
         } catch (Exception e) {
-            return false;
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
     public List<DomainEntity> listAll(DomainEntity entity) {
-        List<DomainEntity> contacts = new ArrayList<>();
         try {
-            Hibernate.getSessionFactory().inTransaction(session -> {
+            List<DomainEntity> contacts = new ArrayList<>();
+
+            Hibernateeeee.getSessionFactory().inTransaction(session -> {
                 contacts.addAll(session.createQuery("from Contact", Contact.class).getResultList());
             });
+
+            return contacts;
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException(e.getMessage());
         }
-        return contacts;
     }
 }
