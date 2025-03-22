@@ -1,5 +1,6 @@
 package com.roque.agenda.controllers;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.roque.agenda.models.Customer;
 import com.roque.agenda.models.DomainEntity;
 import org.springframework.http.HttpStatus;
@@ -10,13 +11,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CustomerController {
     Controller controller = new Controller();
 
     @GetMapping("/")
-    public ResponseEntity<?> getCustomers() {
+    public ResponseEntity<?> getCustomers(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "cpf", required = false) String cpf ) {
         try {
             Customer customer = new Customer();
+
+            if (name != null) customer.setName(name);
+            if (cpf != null) customer.setCpf(cpf);
+
             List<DomainEntity> customers = controller.listAll(customer);
             return ResponseEntity.ok(customers);
         } catch (Exception e) {
@@ -29,6 +35,7 @@ public class CustomerController {
         try {
             Customer customer = new Customer();
             customer.setId(id);
+
             DomainEntity respCustomer = controller.read(customer);
             return ResponseEntity.ok(respCustomer);
         } catch (Exception e) {

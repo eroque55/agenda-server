@@ -1,12 +1,14 @@
 package com.roque.agenda.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "contact", schema = "agenda")
 public class Contact extends DomainEntity {
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
+    @JsonIgnore
     private Customer customer;
 
     @Enumerated(EnumType.STRING)
@@ -20,18 +22,6 @@ public class Contact extends DomainEntity {
     private String observations;
 
     public Contact() {}
-
-    public Contact(ContactType type, String value) {
-        this.type = type;
-        this.value = value;
-    }
-
-    public Contact(int id, Customer customer, String value, String observations) {
-        super(id);
-        this.customer = customer;
-        this.value = value;
-        this.observations = observations;
-    }
 
     public Customer getCustomer() {
         return customer;
@@ -63,5 +53,15 @@ public class Contact extends DomainEntity {
 
     public void setObservations(String observations) {
         this.observations = observations;
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "customer=" + customer +
+                ", type=" + type +
+                ", value='" + value + '\'' +
+                ", observations='" + observations + '\'' +
+                '}';
     }
 }

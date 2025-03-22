@@ -2,7 +2,7 @@ package com.roque.agenda.daos;
 
 import com.roque.agenda.models.Contact;
 import com.roque.agenda.models.DomainEntity;
-import com.roque.agenda.utils.Hibernateeeee;
+import com.roque.agenda.utils.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ public class ContactDao implements IDao {
     public DomainEntity create(DomainEntity entity) {
         try {
             Contact contact = (Contact) entity;
-            Hibernateeeee.getSessionFactory().inTransaction(session -> {
+            HibernateUtil.getSessionFactory().inTransaction(session -> {
                 session.persist(contact);
             });
 
@@ -26,7 +26,7 @@ public class ContactDao implements IDao {
     public DomainEntity read(DomainEntity entity) {
         try {
             Contact contact = (Contact) entity;
-            Hibernateeeee.getSessionFactory().inTransaction(session -> {
+            HibernateUtil.getSessionFactory().inTransaction(session -> {
                 Contact contactDB = session.get(Contact.class, contact.getId());
 
                 if (contactDB == null) {
@@ -48,7 +48,7 @@ public class ContactDao implements IDao {
     public DomainEntity update(DomainEntity entity) {
         try {
             Contact contact = (Contact) entity;
-            Hibernateeeee.getSessionFactory().inTransaction(session -> {
+            HibernateUtil.getSessionFactory().inTransaction(session -> {
                 Contact contactDB = session.get(Contact.class, contact.getId());
 
                 if (contactDB == null) {
@@ -68,7 +68,6 @@ public class ContactDao implements IDao {
                 }
 
                 session.merge(contactDB);
-                session.flush();
 
                 contact.setCustomer(contactDB.getCustomer());
                 contact.setType(contactDB.getType());
@@ -86,7 +85,7 @@ public class ContactDao implements IDao {
     public void delete(DomainEntity entity) {
         try {
             Contact contact = (Contact) entity;
-            Hibernateeeee.getSessionFactory().inTransaction(session -> {
+            HibernateUtil.getSessionFactory().inTransaction(session -> {
                 Contact contactDB = session.get(Contact.class, contact.getId());
 
                 if (contactDB == null) {
@@ -105,7 +104,7 @@ public class ContactDao implements IDao {
         try {
             List<DomainEntity> contacts = new ArrayList<>();
 
-            Hibernateeeee.getSessionFactory().inTransaction(session -> {
+            HibernateUtil.getSessionFactory().inTransaction(session -> {
                 contacts.addAll(session.createQuery("from Contact", Contact.class).getResultList());
             });
 

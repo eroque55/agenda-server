@@ -3,6 +3,7 @@ package com.roque.agenda.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,14 +15,11 @@ public class Customer extends DomainEntity {
     @Column(nullable = false, unique = true, length = 14)
     private String cpf;
 
-    @Column
     private LocalDate birthday;
-
-    @Column
     private String address;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Contact> contacts;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Contact> contacts = new ArrayList<>();
 
     public Customer() {
     }
@@ -78,5 +76,16 @@ public class Customer extends DomainEntity {
 
     public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "name='" + name + '\'' +
+                ", cpf='" + cpf + '\'' +
+                ", birthday=" + birthday +
+                ", address='" + address + '\'' +
+                ", contacts=" + contacts +
+                '}';
     }
 }

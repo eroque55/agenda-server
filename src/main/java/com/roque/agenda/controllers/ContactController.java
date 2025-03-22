@@ -1,6 +1,7 @@
 package com.roque.agenda.controllers;
 
 import com.roque.agenda.models.Contact;
+import com.roque.agenda.models.Customer;
 import com.roque.agenda.models.DomainEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +37,12 @@ public class ContactController {
         }
     }
 
-    @PostMapping("/")
-    public ResponseEntity<?> createContact(@RequestBody Contact contact) {
+    @PostMapping("/{id}")
+    public ResponseEntity<?> createContact(@PathVariable("id") int customerId, @RequestBody Contact contact) {
         try {
+            Customer customer = new Customer();
+            customer.setId(customerId);
+            contact.setCustomer(customer);
             DomainEntity respContact = controller.create(contact);
             return ResponseEntity.ok(respContact);
         } catch (Exception e) {

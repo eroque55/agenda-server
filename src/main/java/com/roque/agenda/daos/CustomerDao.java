@@ -2,8 +2,7 @@ package com.roque.agenda.daos;
 
 import com.roque.agenda.models.Customer;
 import com.roque.agenda.models.DomainEntity;
-import com.roque.agenda.utils.Hibernateeeee;
-import org.hibernate.Hibernate;
+import com.roque.agenda.utils.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,7 @@ public class CustomerDao implements IDao {
     public DomainEntity create(DomainEntity entity) {
         try {
             Customer customer = (Customer) entity;
-            Hibernateeeee.getSessionFactory().inTransaction(session -> {
+            HibernateUtil.getSessionFactory().inTransaction(session -> {
                 session.persist(customer);
                 session.flush();
             });
@@ -28,19 +27,12 @@ public class CustomerDao implements IDao {
     public DomainEntity read(DomainEntity entity) {
         Customer customer = (Customer) entity;
         try {
-            Hibernateeeee.getSessionFactory().inTransaction(session -> {
+            HibernateUtil.getSessionFactory().inTransaction(session -> {
                 Customer customerDB = session.get(Customer.class, customer.getId());
 
                 if (customerDB == null) {
                     throw new RuntimeException("Cliente não encontrado");
                 }
-
-                var graph = session.createEntityGraph(Customer.class);
-                graph.addSubgraph(Customer().);
-                graph.addPluralSubgraph(BCustomer.authors).addSubgraph(AutCustomer.person);
-                Book book = entityManager.find(graph, bookId);
-
-                Hibernate.initialize(customerDB.getContacts());
 
                 customer.setName(customerDB.getName());
                 customer.setCpf(customerDB.getCpf());
@@ -58,7 +50,7 @@ public class CustomerDao implements IDao {
     public DomainEntity update(DomainEntity entity) {
         try {
             Customer customer = (Customer) entity;
-            Hibernateeeee.getSessionFactory().inTransaction(session -> {
+            HibernateUtil.getSessionFactory().inTransaction(session -> {
                 Customer customerDB = session.get(Customer.class, customer.getId());
 
                 if (customerDB == null) {
@@ -79,7 +71,6 @@ public class CustomerDao implements IDao {
                 }
 
                 session.merge(customerDB);
-                session.flush();
 
                 customer.setName(customerDB.getName());
                 customer.setCpf(customerDB.getCpf());
@@ -97,7 +88,7 @@ public class CustomerDao implements IDao {
     public void delete(DomainEntity entity) {
         try {
             Customer customer = (Customer) entity;
-            Hibernateeeee.getSessionFactory().inTransaction(session -> {
+            HibernateUtil.getSessionFactory().inTransaction(session -> {
                 Customer customerDB = session.get(Customer.class, customer.getId());
 
                 if (customerDB == null) {
@@ -114,12 +105,21 @@ public class CustomerDao implements IDao {
     @Override
     public List<DomainEntity> listAll(DomainEntity entity) {
         try {
+            Customer filter = (Customer) entity;
+            StringBuilder query = new StringBuilder("from Customer c where 1=1");
+
+            if (filter.getName() != null) query.append(" and c.name like '%" + filter.getName() + "%'");
+            if (filter.getCpf() != null) query.append(" and c.cpf like '%" + filter.getCpf() + "%'");
+
+            List<Customer> tempCustomers = new ArrayList<>();
             List<DomainEntity> customers = new ArrayList<>();
-
-            Hibernateeeee.getSessionFactory().inTransaction(session -> {
-                customers.addAll(session.createQuery("from Customer", Customer.class).getResultList());
+            HibernateUtil.getSessionFactory().inTransaction(session -> {
+                tempCustomers.addAll(session.createQuery(query.toString(), Customer.class).getResultList());
             });
-
+            tempCustomers.forEach(customer -> {
+                customer.setContacts(new ArrayList<>());
+                customers.add(customer);
+            });
             return customers;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
