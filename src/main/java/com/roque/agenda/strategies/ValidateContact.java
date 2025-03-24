@@ -10,31 +10,29 @@ public class ValidateContact implements IStrategy {
         StringBuilder sb = new StringBuilder();
 
         if (entity == null) {
-            sb.append("Entidade nula\n");
+            sb.append("Entidade nula, ");
         }
 
         Contact contact = (Contact) entity;
 
         if (contact.getCustomer() == null) {
-            sb.append("Cliente obrigatório\n");
-        } else if (contact.getCustomer().getId() == 0){
-            sb.append("Cliente deve ter um id\n");
+            sb.append("Cliente obrigatório, ");
+        } else if (contact.getCustomer().getId() == 0) {
+            sb.append("Cliente deve ter um id, ");
         }
 
         if (contact.getType() == null) {
-            sb.append("Tipo de contato obrigatório\n");
+            sb.append("Tipo de contato obrigatório; ");
+        } else if (contact.getValue() == null || contact.getValue().isEmpty()) {
+            sb.append("Valor do contato é obrigatório, ");
         } else if (contact.getType() == ContactType.EMAIL) {
             if (!isValidEmail(contact.getValue())) {
-                sb.append("E-mail inválido\n");
+                sb.append("E-mail inválido, ");
             }
         } else if (contact.getType() == ContactType.PHONE) {
             if (!isValidPhone(contact.getValue())) {
-                sb.append("Número de telefone inválido\n");
+                sb.append("Número de telefone inválido, ");
             }
-        }
-
-        if (contact.getValue() == null || contact.getValue().isEmpty()) {
-            sb.append("Valor do contato é obrigatório\n");
         }
 
         return sb.toString();

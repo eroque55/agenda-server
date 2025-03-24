@@ -11,24 +11,24 @@ public class ValidateCustomer implements IStrategy {
         StringBuilder sb = new StringBuilder();
 
         if (entity == null) {
-            sb.append("Entidade nula\n");
+            sb.append("Entidade nula, ");
         }
 
         Customer customer = (Customer) entity;
 
         if (customer.getName() == null || customer.getName().isEmpty()) {
-            sb.append("Nome do cliente é obrigatório\n");
+            sb.append("Nome do cliente é obrigatório, ");
         }
 
         if (customer.getCpf() == null || customer.getCpf().isEmpty()) {
-            sb.append("CPF é obrigatório\n");
+            sb.append("CPF é obrigatório, ");
         } else if (!isValidCPF(customer.getCpf())) {
-            sb.append("CPF inválido\n");
+            sb.append("CPF inválido, use apenas números, ");
         }
 
         if (customer.getBirthday() != null) {
             if (customer.getBirthday().getYear() < 1900 || customer.getBirthday().isAfter(LocalDate.now())) {
-                sb.append("Data de nascimento inválida\n");
+                sb.append("Data de nascimento inválida, ");
             }
         }
 
@@ -36,8 +36,6 @@ public class ValidateCustomer implements IStrategy {
     }
 
     private boolean isValidCPF(String cpf) {
-        cpf = cpf.replaceAll("[^0-9]", "");
-
         if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) {
             return false;
         }
